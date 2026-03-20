@@ -1,4 +1,5 @@
 import { getUpcomingEvents, getTodaysEvents, buildCalendarEventId, isExternalParticipant } from '@/lib/google/calendar';
+import { formatTime } from '@/lib/timezone';
 import { getMeetingByCalendarEventId, createMeeting, createContact, isBlocklisted, addMeetingParticipant, getContactByEmail, updateContactLastInteraction } from '@/lib/db/queries';
 import { sendEmail } from '@/lib/google/gmail';
 import { renderNewContactNotification } from '@/lib/email/render';
@@ -90,10 +91,7 @@ export async function runPrepTrigger(): Promise<void> {
       const prepPack = await generatePrepPack(meeting.id, context);
 
       // Deliver email
-      const meetingTime = event.startTime.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
+      const meetingTime = formatTime(event.startTime);
       await deliverPrepEmail(meeting.id, prepPack, templateType, event.title, meetingTime);
 
       console.log(`[Prep Trigger] Successfully processed: "${event.title}"`);
@@ -130,7 +128,7 @@ async function checkForNewContacts(): Promise<void> {
         newContacts.push({
           name,
           company,
-          meetingTime: event.startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+          meetingTime: formatTime(event.startTime),
           contactId: contact.id,
         });
 

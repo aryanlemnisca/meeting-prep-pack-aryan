@@ -3,6 +3,7 @@ import { PrepPackView } from '@/app/components/prep-pack-view';
 import { AddNoteForm } from '@/app/components/add-note-form';
 import { ManualTriggerButton } from '@/app/components/manual-trigger-button';
 import { notFound } from 'next/navigation';
+import { formatTime, formatDate } from '@/lib/timezone';
 import type { PrepPack } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -15,7 +16,7 @@ export default async function MeetingDetailPage({ params }: { params: Promise<{ 
   const participants = await getParticipantsForMeeting(id);
   const notes = await getNotesForMeeting(id);
 
-  const startTime = meeting.startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const startTime = formatTime(meeting.startTime);
 
   return (
     <div>
@@ -73,7 +74,7 @@ export default async function MeetingDetailPage({ params }: { params: Promise<{ 
               <div key={note.id} className="rounded-md bg-[#111827] p-3">
                 <p className="text-sm text-gray-300">{note.content}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {note.noteType.replace('_', ' ')} · {note.createdAt.toLocaleDateString()}
+                  {note.noteType.replace('_', ' ')} · {formatDate(note.createdAt)}
                 </p>
               </div>
             ))}

@@ -2,6 +2,7 @@
 // NOTE: Manual trigger skips blocklist — if Pushkar explicitly wants a prep pack, respect that
 import { NextResponse } from 'next/server';
 import { getMeetingById, getParticipantsForMeeting } from '@/lib/db/queries';
+import { formatTime } from '@/lib/timezone';
 import { assembleContext } from '@/lib/pipeline/assemble-context';
 import { generatePrepPack } from '@/lib/pipeline/generate-prep';
 import { deliverPrepEmail } from '@/lib/pipeline/deliver-email';
@@ -30,7 +31,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const context = await assembleContext(event);
   const prepPack = await generatePrepPack(id, context);
 
-  const meetingTime = meeting.startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const meetingTime = formatTime(meeting.startTime);
   await deliverPrepEmail(id, prepPack, meeting.templateType as any, meeting.title, meetingTime);
 
   return NextResponse.json({ success: true, prepPack });

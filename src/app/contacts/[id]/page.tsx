@@ -4,6 +4,7 @@ import { AddContactNote } from '@/app/components/add-contact-note';
 import { LinkedInUrlInput } from '@/app/components/linkedin-url-input';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { formatDate } from '@/lib/timezone';
 import type { ContactProfileSchema } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -193,7 +194,7 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
               <div key={note.id} className="rounded-md border border-gray-800 bg-[#111827] p-3">
                 <p className="text-sm text-gray-300">{note.content}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {note.noteType.replace('_', ' ')} · {note.createdAt.toLocaleDateString()}
+                  {note.noteType.replace('_', ' ')} · {formatDate(note.createdAt)}
                 </p>
               </div>
             ))}
@@ -206,8 +207,8 @@ export default async function ContactDetailPage({ params }: { params: Promise<{ 
 
       {/* Metadata */}
       <div className="rounded-lg border border-gray-800 bg-[#111827] p-4 text-xs text-gray-600">
-        <p>First seen: {contact.firstSeenAt.toLocaleDateString()}</p>
-        {contact.lastInteractionAt && <p>Last interaction: {contact.lastInteractionAt.toLocaleDateString()}</p>}
+        <p>First seen: {formatDate(contact.firstSeenAt)}</p>
+        {contact.lastInteractionAt && <p>Last interaction: {formatDate(contact.lastInteractionAt)}</p>}
         <p>Contact ID: {contact.id}</p>
       </div>
     </div>

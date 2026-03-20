@@ -2,6 +2,7 @@ import { eq, and, gte, lte, ilike } from 'drizzle-orm';
 import { db } from './client';
 import { meetingsProcessed, contacts, contactNotes, blocklist, meetingParticipants } from './schema';
 import type { PrepPack, ContactProfileSchema, MeetingMode, TemplateType, MeetingType, PrepStatus, NoteType } from '@/types';
+import { getTodayBoundsIST } from '@/lib/timezone';
 
 // === Meetings ===
 
@@ -16,10 +17,7 @@ export async function getMeetingById(id: string) {
 }
 
 export async function getTodaysMeetings() {
-  const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
-  const endOfDay = new Date();
-  endOfDay.setHours(23, 59, 59, 999);
+  const { startOfDay, endOfDay } = getTodayBoundsIST();
 
   return db.select().from(meetingsProcessed)
     .where(and(

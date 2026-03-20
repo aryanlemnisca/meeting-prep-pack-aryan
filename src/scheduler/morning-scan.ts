@@ -1,5 +1,6 @@
 // src/scheduler/morning-scan.ts
 import { getTodaysEvents, isExternalParticipant } from '@/lib/google/calendar';
+import { formatTime } from '@/lib/timezone';
 import { getContactByEmail, createContact } from '@/lib/db/queries';
 import { sendEmail } from '@/lib/google/gmail';
 import { renderNewContactNotification } from '@/lib/email/render';
@@ -30,7 +31,7 @@ export async function runMorningScan(): Promise<void> {
       newContacts.push({
         name,
         company,
-        meetingTime: event.startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        meetingTime: formatTime(event.startTime),
         contactId: contact.id,
       });
     }

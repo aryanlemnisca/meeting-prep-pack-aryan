@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { LinkedInUrlInput } from './linkedin-url-input';
 import { ManualTriggerButton } from './manual-trigger-button';
+import { formatTime } from '@/lib/timezone';
 
 interface MeetingCardProps {
   meeting: {
@@ -32,8 +33,8 @@ const statusBadgeColors: Record<string, string> = {
 };
 
 export function MeetingCard({ meeting, participants }: MeetingCardProps) {
-  const startTime = new Date(meeting.startTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  const endTime = new Date(meeting.endTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const startTime = formatTime(meeting.startTime);
+  const endTime = formatTime(meeting.endTime);
   const typeColor = typeBadgeColors[meeting.meetingType ?? 'other'] ?? typeBadgeColors.other;
   const statusColor = statusBadgeColors[meeting.prepStatus] ?? statusBadgeColors.pending;
 

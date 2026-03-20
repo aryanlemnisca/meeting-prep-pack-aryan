@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getAllContacts } from '@/lib/db/queries';
+import { formatDate } from '@/lib/timezone';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,7 +48,7 @@ export default async function ContactsPage({ searchParams }: { searchParams: Pro
                 )}
                 {contact.lastInteractionAt && (
                   <p className="text-xs text-gray-500 mt-2">
-                    Last: {new Date(contact.lastInteractionAt).toLocaleDateString()}
+                    Last: {formatDate(contact.lastInteractionAt)}
                   </p>
                 )}
                 {profile?.data_quality && (

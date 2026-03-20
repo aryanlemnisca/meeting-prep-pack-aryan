@@ -1,6 +1,7 @@
 import { getTodaysMeetings, getParticipantsForMeeting } from '@/lib/db/queries';
 import { MeetingCard } from './components/meeting-card';
 import { ScanCalendarButton } from './components/scan-calendar-button';
+import { formatFullDate } from '@/lib/timezone';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,12 +15,7 @@ export default async function HomePage() {
     })
   );
 
-  const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  const today = formatFullDate(new Date());
 
   return (
     <div>

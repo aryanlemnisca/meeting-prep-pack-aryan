@@ -12,7 +12,7 @@ export async function deliverPrepEmail(
   meetingTime: string,
 ): Promise<void> {
   const recipientEmail = process.env.RECIPIENT_EMAIL!;
-  const subject = `Prep Pack: ${meetingTitle} — ${meetingTime}`;
+  const subject = `Prep Pack: ${meetingTitle} - ${meetingTime}`;
 
   const html = await renderPrepEmail(prepPack, templateType);
 

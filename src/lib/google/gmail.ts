@@ -114,14 +114,18 @@ export async function sendEmail(to: string, subject: string, htmlBody: string): 
 }
 
 function createRawEmail(from: string, to: string, subject: string, htmlBody: string): string {
+  // MIME encode subject for UTF-8 support (handles em dashes, accents, etc.)
+  const encodedSubject = `=?UTF-8?B?${Buffer.from(subject).toString('base64')}?=`;
+
   const messageParts = [
     `From: ${from}`,
     `To: ${to}`,
-    `Subject: ${subject}`,
+    `Subject: ${encodedSubject}`,
     'MIME-Version: 1.0',
     'Content-Type: text/html; charset=utf-8',
+    'Content-Transfer-Encoding: base64',
     '',
-    htmlBody,
+    Buffer.from(htmlBody).toString('base64'),
   ];
 
   const message = messageParts.join('\r\n');
